@@ -38,6 +38,16 @@ This repo ships with a premium-design tech stack for Claude Code (Emil Kowalski 
 bash scripts/setup-design-stack.sh
 ```
 
+## Scope Studio (inhouse rebuild tool)
+
+A local control panel that turns a website URL into a brand-new premium site, pushes it to a fresh
+GitHub repo, and deploys it to Vercel — one click, one client-ready URL. Runs locally (it drives a
+browser and the Claude Agent SDK). See [`docs/studio.md`](docs/studio.md).
+
+```bash
+npm run studio   # then open http://localhost:3000/studio
+```
+
 ## Production integrations
 
 The audit, report download, pricing, and request flows work without external services. To turn requests into transactional delivery and payment, connect the placeholders in `.env.example` to:

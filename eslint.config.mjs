@@ -14,6 +14,10 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Vendored Claude Code design skills (third-party, not app source).
     ".claude/**",
+    // Generated-site starter template — a separate project, linted on its own.
+    "studio/templates/**",
+    // Local Studio working directory (job workspaces, screenshots, db).
+    ".studio/**",
   ]),
 ]);
 
