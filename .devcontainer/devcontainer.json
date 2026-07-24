@@ -1,0 +1,25 @@
+{
+  "name": "Scope Studio",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:22",
+  "forwardPorts": [3000],
+  "portsAttributes": {
+    "3000": {
+      "label": "Scope Studio",
+      "onAutoForward": "openPreview"
+    }
+  },
+  "postCreateCommand": "npm install && npx playwright install --with-deps chromium",
+  "postAttachCommand": {
+    "hinweis": "bash .devcontainer/welcome.sh"
+  },
+  "remoteEnv": {
+    "STUDIO_GITHUB_TOKEN": "${localEnv:STUDIO_GITHUB_TOKEN}",
+    "VERCEL_TOKEN": "${localEnv:VERCEL_TOKEN}",
+    "VERCEL_TEAM_ID": "${localEnv:VERCEL_TEAM_ID}"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": ["dbaeumer.vscode-eslint"]
+    }
+  }
+}

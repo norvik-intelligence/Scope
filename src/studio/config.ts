@@ -13,11 +13,21 @@ export type Secrets = {
   vercelTeamId: string | null;
 };
 
+function envAny(...names: string[]): string | null {
+  for (const name of names) {
+    const value = process.env[name]?.trim();
+    if (value) return value;
+  }
+  return null;
+}
+
 export function readSecrets(): Secrets {
   return {
-    githubToken: process.env.GITHUB_TOKEN?.trim() || null,
-    vercelToken: process.env.VERCEL_TOKEN?.trim() || null,
-    vercelTeamId: process.env.VERCEL_TEAM_ID?.trim() || null,
+    // GITHUB_* is a reserved Codespaces secret prefix, so STUDIO_GITHUB_TOKEN is
+    // the Codespaces-friendly alias.
+    githubToken: envAny("GITHUB_TOKEN", "GH_TOKEN", "STUDIO_GITHUB_TOKEN"),
+    vercelToken: envAny("VERCEL_TOKEN", "STUDIO_VERCEL_TOKEN"),
+    vercelTeamId: envAny("VERCEL_TEAM_ID", "STUDIO_VERCEL_TEAM_ID"),
   };
 }
 

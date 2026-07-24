@@ -48,6 +48,8 @@ browser and the Claude Agent SDK). See [`docs/studio.md`](docs/studio.md).
 npm run studio   # then open http://localhost:3000/studio
 ```
 
+No Mac handy? Run it from a phone via GitHub Codespaces — see [`docs/codespaces.md`](docs/codespaces.md).
+
 ## Production integrations
 
 The audit, report download, pricing, and request flows work without external services. To turn requests into transactional delivery and payment, connect the placeholders in `.env.example` to:

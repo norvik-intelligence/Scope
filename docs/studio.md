@@ -9,6 +9,9 @@ Ergebnis: eine fertige Live-URL, die du direkt an den Kunden schicken kannst.
 > Typografie, Spacing und Motion aber auf Agentur-Niveau neu gestaltet — angetrieben von den Skills
 > `design-taste-frontend`, `impeccable` und `emil-design-eng` (siehe [docs/design-stack.md](design-stack.md)).
 
+> **Nur am Handy, kein Mac?** Scope Studio läuft auch in **GitHub Codespaces** (Cloud, komplett im
+> Browser bedienbar). Anleitung: [docs/codespaces.md](codespaces.md).
+
 ## Warum lokal?
 
 Die Pipeline braucht ein langlaufendes Node-Prozess mit Dateisystem, startet einen Browser (Playwright)
