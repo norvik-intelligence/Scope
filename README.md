@@ -30,6 +30,26 @@ npm run lint
 npm run build
 ```
 
+## Design tech stack
+
+This repo ships with a premium-design tech stack for Claude Code (Emil Kowalski + Taste + Impeccable skills, plus Figma and Playwright MCP) so the AI builds intentional, non-generic UI. See [`docs/design-stack.md`](docs/design-stack.md). To add it to a new project:
+
+```bash
+bash scripts/setup-design-stack.sh
+```
+
+## Scope Studio (inhouse rebuild tool)
+
+A local control panel that turns a website URL into a brand-new premium site, pushes it to a fresh
+GitHub repo, and deploys it to Vercel — one click, one client-ready URL. Runs locally (it drives a
+browser and the Claude Agent SDK). See [`docs/studio.md`](docs/studio.md).
+
+```bash
+npm run studio   # then open http://localhost:3000/studio
+```
+
+No Mac handy? Run it from a phone via GitHub Codespaces — see [`docs/codespaces.md`](docs/codespaces.md).
+
 ## Production integrations
 
 The audit, report download, pricing, and request flows work without external services. To turn requests into transactional delivery and payment, connect the placeholders in `.env.example` to:

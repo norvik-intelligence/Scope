@@ -36,6 +36,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# scope studio local working dir (jobs, screenshots, db)
+/.studio
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
