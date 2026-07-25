@@ -22,6 +22,29 @@ function chromiumPath(): string | undefined {
   return undefined;
 }
 
+// Use an outbound proxy when the environment defines one, but never for local or
+// private addresses — routing localhost through a proxy captures the proxy's own
+// error page instead of the site. NO_PROXY entries are honored as well.
+function proxyOption(): { proxy?: { server: string; bypass: string } } {
+  const server = (process.env.HTTPS_PROXY || process.env.HTTP_PROXY || "").trim();
+  if (!server) return {};
+  const extra = (process.env.NO_PROXY || process.env.no_proxy || "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const bypass = [
+    "localhost",
+    "127.0.0.1",
+    "::1",
+    "*.local",
+    "10.*",
+    "192.168.*",
+    "172.16.*",
+    ...extra,
+  ].join(",");
+  return { proxy: { server, bypass } };
+}
+
 export function normalizeUrl(input: string): string {
   const trimmed = input.trim();
   if (!trimmed) throw new Error("Bitte eine Website-URL angeben.");
@@ -51,11 +74,10 @@ export async function capture(
   fs.mkdirSync(outDir, { recursive: true });
 
   onLog(`Starte Browser und lade ${target}`);
-  const proxyServer = process.env.HTTPS_PROXY || process.env.HTTP_PROXY || undefined;
   const browser = await chromium.launch({
     headless: true,
     executablePath: chromiumPath(),
-    ...(proxyServer ? { proxy: { server: proxyServer } } : {}),
+    ...proxyOption(),
   });
   try {
     const context = await browser.newContext({

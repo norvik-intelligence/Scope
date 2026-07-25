@@ -39,12 +39,24 @@ function detectLanguage(text: string): string {
   return hits >= 2 ? "Deutsch" : "Englisch";
 }
 
+function escapeRegex(input: string): string {
+  return input.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+// Match on word starts, not bare substrings: a plain `includes("bar")` matches
+// German words like "sichtbar"/"umsetzbar" and misclassifies the whole site.
+function countTerm(lower: string, term: string): number {
+  const pattern = new RegExp(`(^|[^a-zäöüß])${escapeRegex(term)}`, "g");
+  return (lower.match(pattern) || []).length;
+}
+
 function detectIndustry(haystack: string): string {
   const lower = haystack.toLowerCase();
   let best = { industry: "Allgemeine Business-Website", score: 0 };
   for (const hint of INDUSTRY_HINTS) {
-    const score = hint.terms.reduce((n, t) => (lower.includes(t) ? n + 1 : n), 0);
-    if (score > best.score) best = { industry: hint.industry, score };
+    const score = hint.terms.reduce((n, t) => n + Math.min(countTerm(lower, t), 3), 0);
+    // Require more than one signal so a single incidental word can't decide it.
+    if (score > best.score && score >= 2) best = { industry: hint.industry, score };
   }
   return best.industry;
 }

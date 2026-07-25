@@ -11,6 +11,7 @@ import path from "node:path";
 import { query } from "@anthropic-ai/claude-agent-sdk";
 
 import {
+  AGENT_ALLOWED_TOOLS,
   designSkillsDir,
   jobArtifactsDir,
   jobWorkspace,
@@ -38,9 +39,14 @@ export async function generate(
       prompt,
       options: {
         cwd: workspace,
-        // Load the workspace's .claude/skills (design skills) + .mcp.json.
+        // Load the workspace's .claude/skills (design skills) via project settings.
         settingSources: ["project"],
-        permissionMode: "bypassPermissions",
+        // Auto-approve a fixed toolset; do not load workspace MCP servers to avoid
+        // approval prompts in this non-interactive run.
+        permissionMode: "default",
+        allowedTools: AGENT_ALLOWED_TOOLS,
+        strictMcpConfig: true,
+        mcpServers: {},
         ...(model ? { model } : {}),
         systemPrompt: {
           type: "preset",
@@ -73,6 +79,15 @@ export async function generate(
     }
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
+    if (/session limit|usage limit|rate.?limit|quota/i.test(msg)) {
+      throw new Error(
+        "Claude-Nutzungslimit erreicht (Abo-Kontingent aufgebraucht). Der Lauf kann nach dem " +
+          "Reset einfach neu gestartet werden — der Workspace bleibt erhalten. Alternativ einen " +
+          "ANTHROPIC_API_KEY setzen, dann greift das Limit des Abos nicht. (Detail: " +
+          msg +
+          ")",
+      );
+    }
     if (/login|auth|unauthor|credential/i.test(msg)) {
       throw new Error(
         "Claude-Code-Login nicht gefunden. Bitte einmalig `claude` ausführen und mit " +

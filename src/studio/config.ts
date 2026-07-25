@@ -7,6 +7,22 @@
 import path from "node:path";
 import os from "node:os";
 
+// Tools the design agent may use, auto-approved. Using permissionMode "default"
+// with an explicit allowlist (instead of bypassPermissions) keeps cwd handling
+// correct and works in restricted/root environments too.
+export const AGENT_ALLOWED_TOOLS = [
+  "Read",
+  "Write",
+  "Edit",
+  "Bash",
+  "Glob",
+  "Grep",
+  "Task",
+  "TodoWrite",
+  "WebFetch",
+  "WebSearch",
+];
+
 export type Secrets = {
   githubToken: string | null;
   vercelToken: string | null;

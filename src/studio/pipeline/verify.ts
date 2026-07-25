@@ -5,7 +5,7 @@ import { spawn } from "node:child_process";
 
 import { query } from "@anthropic-ai/claude-agent-sdk";
 
-import { jobWorkspace } from "../config";
+import { AGENT_ALLOWED_TOOLS, jobWorkspace } from "../config";
 
 type Runner = (message: string, level?: "info" | "agent" | "warn") => void;
 
@@ -78,7 +78,10 @@ ${buildErrors}
       options: {
         cwd: workspace,
         settingSources: ["project"],
-        permissionMode: "bypassPermissions",
+        permissionMode: "default",
+        allowedTools: AGENT_ALLOWED_TOOLS,
+        strictMcpConfig: true,
+        mcpServers: {},
         ...(model ? { model } : {}),
       },
     });
